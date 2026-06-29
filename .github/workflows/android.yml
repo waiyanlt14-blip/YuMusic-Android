@@ -17,8 +17,9 @@ jobs:
         run: |
           export PATH=$PATH:$HOME/.local/bin
           export BUILDOZER_ALLOW_ROOT=1
-          buildozer android release
-
+          # Manually trigger the build process
+          buildozer android debug
+        
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
