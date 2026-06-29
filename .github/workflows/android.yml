@@ -7,19 +7,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install dependencies
+      - name: Install System Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo6 cmake libffi-dev libssl-dev
+
+      - name: Install Buildozer and Dependencies
+        run: |
           pip3 install --user --upgrade buildozer
+          pip3 install --user --upgrade cython
+          export PATH=$PATH:$HOME/.local/bin
+          buildozer --version
 
       - name: Build with Buildozer
         run: |
           export PATH=$PATH:$HOME/.local/bin
           export BUILDOZER_ALLOW_ROOT=1
-          # Manually trigger the build process
+          # This command initializes the environment and accepts licenses
           buildozer android debug
-        
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
