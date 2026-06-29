@@ -7,14 +7,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo6 cmake libffi-dev libssl-dev
+
       - name: Build with Buildozer
-        uses: kusyar/buildozer-action@v1.0
-        with:
-          args: android debug
-        env:
-          BUILDOZER_ALLOW_ROOT: 1
-          # This forces Buildozer to use a specific SDK version
-          ANDROID_BUILD_TOOLS_VERSION: "34.0.0"
+        run: |
+          pip3 install --user --upgrade buildozer
+          export PATH=$PATH:$HOME/.local/bin
+          export BUILDOZER_ALLOW_ROOT=1
+          
+          # Force accept licenses by creating the necessary directory and dummy file
+          mkdir -p $HOME/.android
+          touch $HOME/.android/repositories.cfg
+          
+          # Run the build
+          buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
