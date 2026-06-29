@@ -9,6 +9,8 @@ jobs:
 
       - name: Build with Buildozer
         uses: docker://kivy/buildozer:latest
+        env:
+          BUILDER_USER: 1000
         with:
           args: buildozer android release
 
