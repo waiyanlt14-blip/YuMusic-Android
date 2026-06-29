@@ -3,17 +3,16 @@ on: [push, workflow_dispatch]
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Get Buildozer Action
-        uses: ArtemGovorov/buildozer-action@v1
+      - name: Build with Buildozer
+        uses: docker://kivy/buildozer:latest
         with:
-          command: buildozer android release
-          repository_root: .
+          args: buildozer android release
 
-      - name: Upload APK Artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: YuMusic-APK
